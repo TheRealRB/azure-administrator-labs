@@ -1,0 +1,19 @@
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Azure CLI
+.azure/
+
+# Python
+__pycache__/
+
+# Logs
+*.log
