@@ -1,5 +1,5 @@
 ## New workspace for Azure Administrator exam - AZ-104
-
+'''
 
 
 - naming convention rg-az104
@@ -38,6 +38,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
     # Azure Files
     - a share can store 100TiB.  Tebibyte is different than Terabyte.
     - a single file can be up to 4 TiB
+
     - serverless deployment
     - encrypted at rest and transit
     - control access with Entra or AD->synced.
@@ -97,3 +98,8 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - ⏳ Blob Storage
 - ⏳ Virtual Machines
 - ⏳ Networking
+
+
+
+
+'''
