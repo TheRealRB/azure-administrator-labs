@@ -20,6 +20,8 @@ Azure Administrators have subject matter expertise implementing, managing, and m
 
 AZ-104: Prerequisites for Azure administrators (completed)
 AZ-104: Manage identities and governance in Azure (completed)
+
+---
 AZ-104: Implement and manage storage in Azure (in progress)
     - created storage accounts
     - created containers
@@ -35,6 +37,8 @@ AZ-104: Implement and manage storage in Azure (in progress)
     - data management - lifecycle management : create rules to move data to lower (cooler) tiers after specified time periods
     - you can lock down a container or blob to a single ip, range, or vnet
     -
+
+
     # Azure Files
     - a share can store 100TiB.  Tebibyte is different than Terabyte.
     - a single file can be up to 4 TiB
@@ -51,7 +55,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
     - snapshots - point-in-time copies (deltas similar to NetApp snapshots?)
     - up to 200 snapshots per share
     - 
-
+---
 
 
 ** Defender for Cloud
