@@ -42,7 +42,6 @@ AZ-104: Implement and manage storage in Azure (in progress)
 # Azure Files
 - a share can store 100TiB.  Tebibyte is different than Terabyte.
 - a single file can be up to 4 TiB
-
 - serverless deployment
 - encrypted at rest and transit
 - control access with Entra or AD->synced.
@@ -51,10 +50,30 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - replication controlled by the storage account settings
 - Azure File Sync - replicate Azure File shares to Windows Servers (on-prem)
 - supports NFS and SMB protocols (not simultaneously on same share)
-- authentication: SMB identity (AD, Entra DS, Entra Kerberos), access key, Shared Access Signature (SAS)        *SMB uses port 445**
+- authentication: SMB identity (AD, Entra DS, Entra Kerberos), access key, Shared Access Signature (SAS)        **SMB uses port 445**
 - snapshots - point-in-time copies (deltas similar to NetApp snapshots?)
 - up to 200 snapshots per share
-- 
+- ? how does soft delete differ from snapshots ?
+- snapshots are a point-in-time read only copy of the data. Soft delete allows the share to be restored or the file(s)?
+- soft delete retention period between 1 to 365 days
+-
+-
+# Azure Storage Explorer
+- requires management access (Azure Resource Manager) and data layer permissions
+-
+-
+# Azure File Sync
+- enables caching of Azure Files (shares) down to on-premises Window Server or cloud VMs.
+- supports up to 100 sync groups
+- the sync group supports one cloud endpoint (Azure File share) and up to 50 server endpoints
+- server endpoint must be a NTFS formatted volume and cannot be a system volume
+- Azure File Sync Agent must be installed on each Windows Server.
+- consider configuring cloud tiering to move older data off of the local servers and up to Azure Files (cloud)
+
+
+
+
+
 ---
 
 
