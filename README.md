@@ -113,6 +113,16 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - all vms have at least two virtual hard disks (VHDs). One for OS and a second for temp. Typically a limit of two disks per vCPU.
 - max disk sizes range from 32,767 GiB to 65,536 gibibytes (up to ~70 Terabytes)
 - exercise to create a vm in the Azure portal (in progress)
+- created a Linux vm, assigned a public IP, configured a public SSH key for authentication/logon. Generated a private key to my local pc.
+- logged in via cmd line ssh terminal
+- ssh -i C:\Users\ryanb\Downloads\ryanvm1_key.pem azureuser@x.x.x.x
+- create a Resource Manager Template (JSON) from your vm under Automation -> export template. You can download your template in ARM, bicep or terraform. Before you can utilize terraform you must register it to your subscription.
+- auto-shutdown can be used to schedule an automated shutdown.
+- virtual machine scale sets. highly available (load balanced) groups of vms for scaling your apps.
+- Azure load balancer is included with standard tier vms.
+- Azure Site Recovery - replicates workloads from a primary site to a secondary location.
+- Azure Backup - backup as a service that protects physical or virtual machines at any location. Application aware snapshots.
+
 
 
 
@@ -138,7 +148,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Azure Virtual Machines
+- Configure virtual machine availability
 
 
 
