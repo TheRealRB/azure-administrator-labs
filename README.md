@@ -78,12 +78,43 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 # Azure Virtual Machines
 - virtual machines have several required elements
--- the virtual machine
--- disks
--- virtual network
--- NIC
--- NSG to secure network traffic
--- IP address(es)
+1. the virtual machine
+2. disks
+3. virtual network
+4. NIC
+5. NSG to secure network traffic
+6. IP address(es)
+
+- Azure reserves the first four ip addresses and the last ip address in each subnet for its use
+- VM sizing is targeted for workloads
+1. general purpose
+2. compute optimized
+3. memory optimized
+4. storage optimized
+5. gpu
+6. high performance compute
+
+- vm size can be changed while the vm is running as long as the new size is available in the current hardward cluster the vm is running on.
+- the resizing process automatically reboots to complete the request
+- you can also stop and deallocate a vm to select any size available in the region since deallocation removes the vm from the cluster it was running on.
+
+- limits on the numbers of NICs depends on vm size
+- IP addresses - public IPs cost $ per hour
+- virtual network - cost $ per GB
+- dynamic public IP cost is halted when vm is deallocated
+- static public IP cost regardless if anything is connected
+- NSG - no cost
+- disk - no charge for local disk, OS disk is charged $
+- OS cost $
+- every VM costs for compute and storage.
+- compute costs are billed per hour
+- linux is cheaper due to no OS license
+- cost of a vm includes OS
+- all vms have at least two virtual hard disks (VHDs). One for OS and a second for temp. Typically a limit of two disks per vCPU.
+- max disk sizes range from 32,767 GiB to 65,536 gibibytes (up to ~70 Terabytes)
+- exercise to create a vm in the Azure portal (in progress)
+
+
 
 
 
