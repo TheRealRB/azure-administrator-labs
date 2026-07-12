@@ -76,6 +76,27 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ---
 
+# Azure Virtual Machines
+- virtual machines have several required elements
+-- the virtual machine
+-- disks
+-- virtual network
+-- NIC
+-- NSG to secure network traffic
+-- IP address(es)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ** Defender for Cloud
 - connected Defender to GitHub
@@ -86,7 +107,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Azure Storage Security
+- Azure Virtual Machines
 
 
 
