@@ -122,7 +122,18 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - Azure load balancer is included with standard tier vms.
 - Azure Site Recovery - replicates workloads from a primary site to a secondary location.
 - Azure Backup - backup as a service that protects physical or virtual machines at any location. Application aware snapshots.
-
+- availability sets - contain vms that perform the same functioality; have the same software installed
+- vm is added to an availability set at time of creation. To move to a different availability set you must delete and re-create the vm
+- availability sets do not cost extra $
+- update domain & fault domain; the update domain contains nodes that are upgraded and rebooted together; only one update domain is rebooted at a time. You can create 1 to 20 update domains at time of creation. Default is 5 UDs.
+- a fault domain is a group of nodes that represent a physical unit of failure. Typically share a common set of hardware. (i.e. a rack)
+- [@EVHC we created a similiar logical separate of servers, sql servers, clusters etc so that patching in groups would no affect resource (app, db) availability]
+- availability zones - unique physical locations (like datacenters). Available in two categories: zonal services and zone-redundant services.
+- vertical vs horizontal scaling. vertical scaling alters the sizing of the vm. horizontal scaling alters the number of vms.
+- vertical sizing requires a vm stop & restart.
+- horizontal scaling is more flexible.
+- virtual machine scale sets - autoscaling with identical vms. automatically scales the number of identical vms as demand increases and reduces the number of vms as demand decreases.
+- vm scale sets have two types of orchestration: uniform and flexible. with uniform, all vms are identical. in flexible, vms can use different sizes, images, configs.
 
 
 
@@ -148,7 +159,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Configure virtual machine availability
+- Implementing Azure App Service plans
 
 
 
