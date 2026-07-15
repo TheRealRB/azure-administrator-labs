@@ -134,10 +134,20 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - horizontal scaling is more flexible.
 - virtual machine scale sets - autoscaling with identical vms. automatically scales the number of identical vms as demand increases and reduces the number of vms as demand decreases.
 - vm scale sets have two types of orchestration: uniform and flexible. with uniform, all vms are identical. in flexible, vms can use different sizes, images, configs.
-
-
-
-
+- .
+- Azure App Server plan is the scale unit of App Service applications.
+1. AAS has three pricing tiers: shared compute (free and shared are the two base tiers) run on the same Azure vms as other app services, including apps of other customers.
+    1. the shared compute tiers allocate CPU quotas to each app and can't scale out
+    2. these shared tiers are only intended for dev and testing purposes.
+    3. No sla for free tiers
+2. dedicated compute. Tiers: basic, standard, premium, premiumV2, premiumV3 all run on dedicated vms
+3. isolated and isolatedV2 tiers run dedicated vms on dedicated Azure VNets
+  
+- Scale up and out on App Service
+- Automatic scaling aka Elastic scaling for PremiumV2 and V3 tiers is a separate feature that automatically scales in response to incoming HTTPs requests without needed a config
+- automatic scaling is managed by Azure platform.
+- maintains warmed instances for immediate response to traffic spikes
+- 
 
 
 
@@ -159,7 +169,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Implementing Azure App Service plans
+- Configure App Service plans
 
 
 
