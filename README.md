@@ -196,7 +196,12 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - rules are applied from bottom to top (655xx upwards to 100)
 - you can configure priority between 100-4096
 - NSGs are created with default rules: DenyAllInbound and AllowInternetOutbound traffic
-
+- some of the critera for configuring rules: source, source port ranges, destination, protocol, action (allow or deny), priority (100-4,096) - some of the protocols are only available via JSON & PowerShell (ESP & AH protocols).
+- you cannot remove the default security rules
+- you can override a default security rule by creating another rule with higher Priority.
+- if you want to set a rule to pass traffic through a NSG you must repeat that rule on every downstream NSG. For example. NSG2 at the subnet level then NSG1 at the NIC level.
+- Use the Effective Security Rules link to analyze security rules
+- 
 
 
 
