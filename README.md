@@ -162,7 +162,40 @@ AZ-104: Implement and manage storage in Azure (in progress)
 # Azure Container Instances
 - containers use a Docker engine. Docker is an orchestration engine. It passes actions from containers directly through to the host OS. Docker makes it so that we can run virtualized apps under the host OS instead of abstracting with a hypervisor host OS.
 - containers provide lightweight isolation from host and other containers. It does not provide as strong a security boundry as a virtual machine.
-- 
+- vms run a complete OS and therefore consume more of the host's resources; containers can be configured to run only the needed services.
+- you can deploy individual containers by using Docker via the cmd line. you can deploy multiple containers with an orchestrator such as Azure Kubernetes Service.
+- containers use Azure Disks for local storage or Azure Files (smb) for shared storages for multi-nodes.
+- all containers are created from container images. container images are lightweight, standalone, executable packages of software.
+- containers can start fast, sometimes in seconds.
+- containers can be directly exposed to the internet with an IP address and FQDN.
+- you specify the CPU cores and memory for each container at deployment time. Resource allocation is fiexed for the lifetime of the container group.
+- container groups are tied together. boot together and are tied to same host.
+- container group is similar to a Kubernetes pod. a container has one group but a group can have multiple containers.
+- 3 ways to deploy a multi-cpntainer group: ARM template, Bicep, YAML files.
+- Azure Container Apps - serverless container for apps, dynamic scaling, runs on top of Azure Kubernetes Service. Common scenarios: deploying API endpoints, hosting background processing jobs, running microservices.
+- Azure Container Apps does not provide direct access to the underlying Kubernetes APIs.
+  
+- Lab 09b - Implement Azure Container Instances
+- container deployed with linux helloworld image. tested with Chrome and Edge browsers on the public IP. test successful. checked the container logs to see HTTPS traffic entries.
+  
+  
+# Azure Virtual Networks
+  
+
+
+
+
+# Azure Network Security Groups
+- you can limit traffic in your virtual network by using a NSG. You can assign a NSG to a subnet or a NIC.
+- most commonly applied at the subnet level. can also apply to a single NIC/vm to be very specific.
+- a single NSG can be used across many subnets
+- you can use NSGs to create a protected subnet (DMZ) - such as a DMZ between external and internal networks.
+- each subnet can have a maximum of one associated NSG.
+- each NIC in a subnet can have 0 or 1 associated NSGs.
+- default security rules tend to be assigned a lot priority in the 65000 area.
+- rules are applied from bottom to top (655xx upwards to 100)
+- you can configure priority between 100-4096
+- NSGs are created with default rules: DenyAllInbound and AllowInternetOutbound traffic
 
 
 
@@ -184,7 +217,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Deploy Azure Container Instances
+- Network Security Groups
 
 
 
@@ -217,7 +250,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 ## Current Progress
 
 - ✅ Azure Storage
-- ⏳ Blob Storage
+- ✅ Blob Storage
 - ⏳ Virtual Machines
 - ⏳ Networking
 
