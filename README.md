@@ -135,7 +135,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - virtual machine scale sets - autoscaling with identical vms. automatically scales the number of identical vms as demand increases and reduces the number of vms as demand decreases.
 - vm scale sets have two types of orchestration: uniform and flexible. with uniform, all vms are identical. in flexible, vms can use different sizes, images, configs.
 - .
-- Azure App Server plan is the scale unit of App Service applications.
+# Azure App Server plan is the scale unit of App Service applications.
 1. AAS has three pricing tiers: shared compute (free and shared are the two base tiers) run on the same Azure vms as other app services, including apps of other customers.
     1. the shared compute tiers allocate CPU quotas to each app and can't scale out
     2. these shared tiers are only intended for dev and testing purposes.
@@ -147,6 +147,21 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - Automatic scaling aka Elastic scaling for PremiumV2 and V3 tiers is a separate feature that automatically scales in response to incoming HTTPs requests without needed a config
 - automatic scaling is managed by Azure platform.
 - maintains warmed instances for immediate response to traffic spikes
+- deployment slots allow you to automatically or manually swap slots (e.g. staging and production slots) to seamlessly promote content to web traffic.
+- App Service security is set by selecting features in the Azure portal (no SDKs, or code changes). The module handles authentication and authorization.
+- App Service offers free managed TLS certicates, which auto-renew 30 days before expiry.
+- You can backup and restore your App Service configuration, file content, connected databases. You need a storage account and container in the same subscription as the app. Backups can be up to 10gb of file and database.
+- each backup contains a zip file and a XML file. The zip contains the data and the XML is the manifest.
+- full backups contain everything and when restored will overwrite everything. Any data outside of the backup gets deleted (files).
+- Azure Application Insights lets your monitor your apps, including .NET, Node.js, and Java EE. Insights works on any public cloud or on-prem hosted apps. Integrates with Azure Pipeline processes.
+- lab09 - implement web apps
+- configure scaling under App Service Plan
+- load test your app
+   
+  
+# Azure Container Instances
+- containers use a Docker engine. Docker is an orchestration engine. It passes actions from containers directly through to the host OS. Docker makes it so that we can run virtualized apps under the host OS instead of abstracting with a hypervisor host OS.
+- containers provide lightweight isolation from host and other containers. It does not provide as strong a security boundry as a virtual machine.
 - 
 
 
@@ -169,7 +184,8 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Configure App Service plans
+- Deploy Azure Container Instances
+
 
 
 
