@@ -154,7 +154,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - each backup contains a zip file and a XML file. The zip contains the data and the XML is the manifest.
 - full backups contain everything and when restored will overwrite everything. Any data outside of the backup gets deleted (files).
 - Azure Application Insights lets your monitor your apps, including .NET, Node.js, and Java EE. Insights works on any public cloud or on-prem hosted apps. Integrates with Azure Pipeline processes.
-- lab09 - implement web apps
+✅ Lab 09 - implement web apps
 - configure scaling under App Service Plan
 - load test your app
    
@@ -175,16 +175,37 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - Azure Container Apps - serverless container for apps, dynamic scaling, runs on top of Azure Kubernetes Service. Common scenarios: deploying API endpoints, hosting background processing jobs, running microservices.
 - Azure Container Apps does not provide direct access to the underlying Kubernetes APIs.
   
-- Lab 09b - Implement Azure Container Instances
+✅ Lab 09b - Implement Azure Container Instances
 - container deployed with linux helloworld image. tested with Chrome and Edge browsers on the public IP. test successful. checked the container logs to see HTTPS traffic entries.
   
   
 # Azure Virtual Networks
+- a virtual representation of your network in the cloud.
+- an Azure virtual network is a logical isolation of Azure cloud resources.
+- each virtual network has its own Classless Inter-Domain Routing (CIDR) block.
+- Site-to-site VPNs use IPSEC to provide secure connections between your corporate VPN gateway and Azure
+- the subnet is housed within the virtual network
+- you can use virtual networks to provision and manage VPNs
+- virtual networks cannot overlap (subnets)
+- 5 ips from each subnet are reserved.  .0, .1, and .255 ; gateway (identifies the virtual network address), default gateway, broadcasts.  Azure also requires .2 and .3 to handle DNS requests.
+- public ip addresses are availble and are often used with load balancers. IPv4 and IPv6 addresses are charged at the same rate.
+- public ip SKU must match the SKU of the load balancer with which it is used. it must also match the tier of the load balancer.
+- examples of resources that can use public ips: vms, load balancer, VPN gateway, application gateway
+- examples of resources that can use private ips: vms, internal load balancer, application gateway 
+- private ips can be dynamically or static assigned. the ips come from the address range of the virtual network subnet
   
-
-
-
-
+✅ Lab 01 - Create and configure virtual networks. created two vnets and linked with virtual network peering.
+  
+✅ Lab 04 - Implement Virtual Networking. 
+- created two virtual networks, configured vnet peering, added network security groups (with rules), added application security group.
+- created a public DNS zone and then a 'www' A-record.
+- DNS services must be homed in a region, even thought DNS is global and region bound, its metadata needs to reside somewhere.
+- DNS zones are assigned four (4) DNS name servers.
+- created a private DNS zone. private zones provide name resolution internally. In Azure private zones resolve to virtual networks within Azure. Link the private dns zone to a virtual network so the vms in the vnet can use the zone.
+- optionally you can enable autoregistration so the virtual machines deployed into the vnet are automatically registered in the DNS zone. Without autoregistration enabled, the vms just use the zone as a lookup zone.
+  
+  
+  
 # Azure Network Security Groups
 - you can limit traffic in your virtual network by using a NSG. You can assign a NSG to a subnet or a NIC.
 - most commonly applied at the subnet level. can also apply to a single NIC/vm to be very specific.
@@ -200,12 +221,51 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - you cannot remove the default security rules
 - you can override a default security rule by creating another rule with higher Priority.
 - if you want to set a rule to pass traffic through a NSG you must repeat that rule on every downstream NSG. For example. NSG2 at the subnet level then NSG1 at the NIC level.
-- Use the Effective Security Rules link to analyze security rules
+- Use the Effective Security Rules link, under Network Monitoring & Management, to analyze security rules
+- augmented security rules - combines multiple values into one rule. in larger environments this can help to prevent NSG rule sprawl.
+- Application Security Groups (ASG) - group your vms by workload in a network layer. You use the ASG as a source or destination in your NSG security group rules.
+   
+  
+# Host your domain on Azure DNS
+- Azure DNS is a hosting service for DNS domains that provide name resolution.
+- DNS is a TCP/IP protocol (53)
+- DNS server is aka name server
+- DNS server maintains a local cache of recent lookups. This cache provides a faster lookup than going out to a remote DNS server. At Envision and Sheridan we ran DNS on the DCs and occassionally would clear the DNS cache as part of name resolution troubleshooting. You could actually see the cached entry list through the DNS managmenet tool in Windows Server.
+- DNS servers also maintain the key-value pair database of IP addresses and any host or subdomain over which the DNS server has authority. At Envision we would host subdomains for internally lookup for things like our intranet, development, internal applications.
+- When you are assigned an IP from DHCP, you typically also get the IPs of your local DNS servers. These were configured on Envision's DHCP servers. In smaller environments I would have DNS and DHCP running on the same server. In larger enterprises it sometimes was better to separate these services for security and performance.
+- When you connect to your ISP, for instance Comcast, the ISP will assign you an IP along with DNS servers that the ISP maintains. DNS lookups that aren't cached on your PC will be relayed to those ISP DNS servers to see if they have cached entries or they will lookup or forward the request. local->ISP->DNS Resolver->root nameserver->TLD nameserver->authoritative nameserver
+- IPv4 has four sets of numbers 127.0.0.1
+- IPv6 has eight sets of hexadecimal numbers ffff.ffff.ffff.ffff.ffff.ffff.ffff.ffff
+- DNs record types: A record (host), CNAME (alias), MX (mail), TXT (text strings). Also: wildcards, CAA (certs), NS (name server), SOA (start of authority), SPF (sender policy framework), SRV (server location)
+- for public DNS zones. Register a domain name. Create an Azure public DNS zone. Copy your zone's Azure DNS servers. Use the registrar service to update it's records to point the Azure DNS servers you copied (NS records). Changing NS details is called Domain Delegation. Use all four name servers provided by Azure DNS.
+- Verify domain delegation after waiting aproximately 10 minutes for propagation. Then perform a nslookup of the SOA for your domain. e.g. nslookup -type=SOA ryanlabs.com
+- after domain delegation you can update the DNS records of your Azure DNS zone.
+- Canonical Name (CNAME) must always point to a domain record.
+- Time to Live (TTL) time duration in seconds for time a cached DNS entry exists before expiring and being elible for refresh query.
+- apex domain is your domain's highest level. e.g. ryanlabs.com. Two apex domain records: NS and SOA.
+- alias DNS records can point to Traffic Manager profile, Content Delivery Network endpoints, public IP resource, front-door profile
+- alias record supports: A-record (IPv4), AAAA-record (IPv6), CNAME record
+  
+# Exercise: git clone https://github.com/MicrosoftDocs/mslearn-host-domain-azure-dns.git
+- this exercise uses a shell script (bash) to configure resources in Azure. NSG, two NICs, a VNET, two VMs, a public IP address, a load balancer that references a backend pool containing the two vms (NICs)
+- the /setup.sh script did not work as-is. I had to modify it to use eastus2 region and added a line to the vm resource, "--size Standard_D2s_v3". I kept running into vm sizing and region limitations on this subscription.
+- once all resources were created in a new resource group, 'az-104-c' I was able to verify the external IP cycles between the web servers on vm1 and vm2. 
+  
+
+- virtual network peering; regional peering or global peering
+- can peer vnets in different subscriptions, different tentants
+- global peering of vnets in different Azure Gov regions is not permitted
+- can create global peering of vnets in any Azure public cloud region or in any China cloud region
+- no downtime during peer creation process
+- must have non-overlapping IP address spaces
+- if you want to change a vnet's address range you must first delete the peering, make the change, then recreate the peering
+- Basic Internal Load Balancer does not cross peers. You must use the Standard Load Balancer for cross-region connections.
+- DNS resolution does not cross the peering boundaries
+- virtual network peering is deal for hub and spoke networking
+- gateway transit with peering to allow remote networks to transit across the peered networks
+- a vnet can only have one VPN gateway
+- gateway transit is supported for both regional and global virtual peering
 - 
-
-
-
-
 
 
 
@@ -222,7 +282,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Network Security Groups
+- Azure VPN Gateway
 
 
 
@@ -256,7 +316,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 - ✅ Azure Storage
 - ✅ Blob Storage
-- ⏳ Virtual Machines
+- ✅ Virtual Machines
 - ⏳ Networking
 
 
