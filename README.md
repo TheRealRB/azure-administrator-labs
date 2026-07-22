@@ -251,7 +251,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - the /setup.sh script did not work as-is. I had to modify it to use eastus2 region and added a line to the vm resource, "--size Standard_D2s_v3". I kept running into vm sizing and region limitations on this subscription.
 - once all resources were created in a new resource group, 'az-104-c' I was able to verify the external IP cycles between the web servers on vm1 and vm2. 
   
-
+# Virtual Network Peering
 - virtual network peering; regional peering or global peering
 - can peer vnets in different subscriptions, different tentants
 - global peering of vnets in different Azure Gov regions is not permitted
@@ -265,14 +265,71 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - gateway transit with peering to allow remote networks to transit across the peered networks
 - a vnet can only have one VPN gateway
 - gateway transit is supported for both regional and global virtual peering
+- you can use NSGs to control flow between the vnets
+- the second vnet in the peering is referred to as the remote network
+- peering has status conditions of either Initiated or Connected
+- vnet peering is non-transitive
+- service chaining is used to direct traffic from one vnet to a virtual appliance or gateway.
+
+
+
+# Lab 05 - Implement Intersite Connectivity
+- created two vms in two separate vnets. peer linked the two vnets.
+- vm1 -> operations -> Run command -> RunPowerShellScript:  Enable-NetFirewallRule -DisplayGroup "Remote Desktop". Running remote PowerShell commands through Azure portal crashed both Windows servers.
+- create a user-defined route to direct traffic from DMZ to a newly created NVA.
+- Finished - had some trouble around RDP services but eventually iron it out and was able to access RDP of server1.
+  
+
+# Azure Network Virtual Appliance
+- az network route-table route create --route-table-name publictable --resource-group "az104-rg5" --name productionsubnet --address-prefix 10.0.1.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.4
+- az network vnet create --name vnet --resource-group "az104-rg5" --address-prefixes 10.0.0.0/16 --subnet-name publicsubnet --subnet-prefixes 10.0.0.0/24
+- az network vnet subnet create --name privatesubnet --vnet-name vnet --resource-group "az104-rg5" --address-prefixes 10.0.1.0/24
+- az network vnet subnet create --name dmzsubnet --vnet-name vnet --resource-group "az104-rg5" --address-prefixes 10.0.2.0/24
+- az network vnet subnet list --resource-group "az104-rg5" --vnet-name vnet --output table
+- az network vnet subnet update --name publicsubnet --vnet-name vnet --resource-group "az104-rg5" --route-table publictable
+- az vm create --resource-group "az104-rg5" --name nva --vnet-name vnet --subnet dmzsubnet --image Ubuntu2204 --admin-username azureuser --admin-password <password>
+- az vm create --resource-group "az104-rg5" --name nva --vnet-name vnet --subnet dmzsubnet --image Ubuntu2204 --admin-username azureuser --admin-password <insert password> --size Standard_D2s_v3
+- az network nic update --name nvaVMNic --resource-group "az104-rg5" --ip-forwarding true
+-$ ssh -t -o StrictHostKeyChecking=no azureuser@20.96.19.135 'sudo sysctl -w net.ipv4.ip_forward=1; exit;'
+  Warning: Permanently added '20.96.19.135' (ED25519) to the list of known hosts.
+  azureuser@20.96.19.135's password: 
+  net.ipv4.ip_forward = 1
+  Connection to 20.96.19.135 closed.
+
+- az vm create --resource-group "az104-rg5" --name public --vnet-name vnet --subnet publicsubnet --image Ubuntu2204 --admin-username azureuser --no-wait --custom-data cloud-init.txt --admin-password "Sup3rC0mPl3x!" --size Standard_D2s_v3
+- az vm create --resource-group "az104-rg5" --name private --vnet-name vnet --subnet privatesubnet --image Ubuntu2204 --admin-username azureuser --no-wait --custom-data cloud-init.txt --admin-password "Sup3rC0mPl3x!" --size Standard_D2s_v3
+
+
+- watch -d -n 5 "az vm list --resource-group "az104-rg5" --show-details --query '[*].{Name:name, ProvisioningState:provisioningState, PowerState:powerState}' --output table"
+- PUBLICIP="$(az vm list-ip-addresses --resource-group "az104-rg5" --name public --query "[].virtualMachine.network.publicIpAddresses[*].ipAddress" --output tsv)"
+- echo $PUBLICIP
+- ssh -t -o StrictHostKeyChecking=no azureuser@$PUBLICIP 'traceroute private --type=icmp; exit'
+  Warning: Permanently added '20.114.155.124' (ED25519) to the list of known hosts.
+  azureuser@20.114.155.124's password: 
+  traceroute to private.d5mijzdz0gjeplhixphgafygjb.cx.internal.cloudapp.net (10.0.1.4), 64 hops max
+  1   10.0.2.4  0.906ms  0.299ms  0.285ms 
+  2   10.0.1.4  1.224ms  0.643ms  0.594ms 
+  Connection to 20.114.155.124 closed.
+  
+- the first hop is the IP address of the NVA vm. The second hop is the address of the private vm.
+
+# Azure Load Balancer
+- Azure Load balancer is a service that allows you to direct incoming network traffic across a group of Azure vms
+- load balancing rules determine how to distribute the traffic
+- health probes determine which nodes are healthy and can receive traffic
+- public load balances maps the public IP address and port to the private internal backend servers
+- public load balancers can provide outbound connections for your vms.
+- internal load balancer directs traffic to resources inside a vnet or that use a VPN to access Azure infrastructure. Internal load balancer front end IP addresses are never exposed to the internet endpoint.
+- Azure Load Balancers operate at the Transport Layer of the OSI model. Layer 4.
+- Session affinity - ensures that the same pool node (vm) handles traffic for a client. AKA Session Persistence.
+- High availability ports. a load balancer rule configured with 'protocol - all and port - 0' is knowsn as a High Availability (HA) port rule. Uses five-tuple connections.
 - 
 
 
 
 
 
-
-
+  
 ** Defender for Cloud
 - connected Defender to GitHub
 - connected Defender to Azure DevOps
@@ -282,7 +339,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Azure VPN Gateway
+- Azure Load Balancer
 
 
 
