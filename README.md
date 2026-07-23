@@ -323,7 +323,59 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - Azure Load Balancers operate at the Transport Layer of the OSI model. Layer 4.
 - Session affinity - ensures that the same pool node (vm) handles traffic for a client. AKA Session Persistence.
 - High availability ports. a load balancer rule configured with 'protocol - all and port - 0' is knowsn as a High Availability (HA) port rule. Uses five-tuple connections.
-- 
+- You can also use NAT rules on a load balancer. e.g. NAT public address to TCP 3389 to a specific VM, like a jump box.
+- Source Network Address Translation (SNAT) rule for outbound VMs.
+- Azure Front Door - alternative to load balancer, that provides layer 7 global load balancing and site acceleration
+- Azure Traffic Manager - DNS based load balancer that works only at domain level. DNS caching makes this slow to fail over.
+- Azure Application Gateway - App Delivery Controller (ADC) various layer 7 load balancing capbilities. Optimize web farm productivity by off-loading TLS/SSL termination to the gateway.
+  
+
+# Azure Application Gateway
+- Session stickiness ensures client requests in the same session are routed to the same back-end server.
+- Application Gateway uses round-robin process to balance traffic to back-end pool
+- supports: HTTP, HTTPS, HTTP/2, WebSocket protocols
+- Web Application Firewall (WAF)
+- End-to-end encryption
+- Autoscaling to adjust capacity
+- Connection draining to allow graceful removal of back-end pool members for maintenance.
+- Application Gateway can not have more than one public IP and one private IP.
+- Listeners: Application Gateway uses one or more listeners to receive incoming requests.
+- Web Application Firewall (WAF) uses OWASP generic rules. Core Rule Sets 3.2, 3.1, 3.0. and 2.2.9. v3.1 is the default.
+- WAF can also limit transfers of large files as to keep them from overwhelming your servers.
+- Path-based routing uses the URL paths to determine which pool of servers to connect to.
+- Multiple-site routing uses the domain name to determine which pool of servers to connect to.
+- Health probes return a status code HTTP 200-399 for healthy servers. Default health probe is to wait 30 seconds for a response before marking the server unhealthy.
+- WebSock and HTTP/2 communicates over HTTP ports 80 and 443.
+  
+
+# Azure Network Watcher
+- Network Watcher is designed to monitor and repair the network health of IaaS products like vms, vnets, AGs, LBs. It is NOT designed for PaaS monitoring or Web analytics.
+- Network Watcher consists of three major sets of tools and capabilities
+  - Monitoring
+  - Network Diagnostic (7 diagnotic tools: IP flow verify, NSG diags, Next hop, Effective Security Rules, Connection Troubleshoot, Packet capture, VPN troubleshoot)
+  - Traffic (two tools: flow logs and traffic analytics)0
+  
+
+# Azure Backup
+- Backup built into Azure for VMs, Azure Disks, SQL and SAP Databases, Azure File Shares, and Blobs, Kubernetes Clusters
+- Can also backup on-premises servers with agents (Microsoft Azure Recovery Services (MARS) agent).
+- zero-infrastructure needed
+- Recovery Time Objective (RTO) is the target time within which a business process must be restored after a disaster
+- Recovery Point Objective (RPO) is the maximum amount of data loss, measured in time, that your organization can sustain during an event.
+- Data Plane - Access Tiers: Snapshot tier, Standard Tier, and Archive Tier
+- You can use the MARS agent to backup files and folders on a VM instead of the entire VM itself.
+- Backup data is stored in vaults; Recovery Services vaults and Backup vaults.
+- Microsoft MARS agent can be used to backup the files, folders, and system state of the VMs.
+- Azure Backup offers a stream-based specialized solution to backup SQL servers running on Azure VMs.
+- Azure Backup integrates with Log Analytics for monitoring and reporting and provides reports via Workbooks.
+- Backup restore types: restore to a new virtual machine, restore disk, replace existing disk on vm, cross-region restore, cross subscription restore, selective disk restore
+- a backup cannot be restored if the VM is allocated and running. Stop the VM in order to restore it.
+  
+
+# Azure Monitoring
+
+
+
 
 
 
@@ -339,8 +391,7 @@ AZ-104: Implement and manage storage in Azure (in progress)
 
 ## Current Module
 
-- Azure Load Balancer
-
+- Azure Monitoring
 
 
 
@@ -374,7 +425,9 @@ AZ-104: Implement and manage storage in Azure (in progress)
 - ✅ Azure Storage
 - ✅ Blob Storage
 - ✅ Virtual Machines
-- ⏳ Networking
+- ✅ Networking
+- ✅ Backup
+- ✅ Monitoring
 
 
 
